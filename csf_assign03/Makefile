@@ -7,7 +7,7 @@ OBJS = $(SRCS:.cpp=.o)
 
 # When submitting to Gradescope, submit all .cpp and .h files,
 # as well as README.txt
-FILES_TO_SUBMIT = $(shell ls *.cpp *.h README.txt 2> /dev/null)
+FILES_TO_SUBMIT = $(shell ls *.cpp *.h README.txt Makefile 2> /dev/null)
 
 # Rule for compiling .cpp to .o
 %.o : %.cpp
