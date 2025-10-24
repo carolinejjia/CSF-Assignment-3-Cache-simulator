@@ -8,8 +8,8 @@ using namespace std;
 
 // cache's single block
 struct CacheLine {
-    bool valid = false;         // does line contain valid data
-    unsigned int tag = 0;       // tag bits so we know which memory block stored
+    bool valid = false; // does line contain valid data
+    unsigned int tag = 0; // tag bits so we know which memory block stored
     unsigned long lastUsed = 0; // used for LRU tracking
 };
 
@@ -50,7 +50,6 @@ int main(int argc, char **argv) {
 
     // take the configuration strings and turn into boolean flags
     bool isWriteAlloc = (writeAlloc == "write-allocate");
-    bool isWriteBack = (writePolicy == "write-back");
     bool useLRU = (evictPolicy == "lru");
 
     // Initialize cache
