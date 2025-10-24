@@ -58,17 +58,17 @@ int main(int argc, char **argv) {
     vector<vector<CacheLine>> cache(numSets, vector<CacheLine>(blocksPerSet));
 
     // counters for the to-be-calculated statistics
-    unsigned long totalLoads = 0
+    unsigned long totalLoads = 0;
     unsigned long totalStores = 0;
-    unsigned long loadHits = 0
+    unsigned long loadHits = 0;
     unsigned long loadMisses = 0;
-    unsigned long storeHits = 0
+    unsigned long storeHits = 0;
     unsigned long storeMisses = 0;
-    unsigned long cycles = 0
+    unsigned long cycles = 0;
     unsigned long timeCounter = 0; // this increments after an access
 
     string op;
-    unsigned int addr
+    unsigned int addr;
     unsigned int dummy;
 
     // read the memory trace with stdin
