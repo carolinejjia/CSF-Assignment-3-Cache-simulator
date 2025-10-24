@@ -14,6 +14,10 @@ struct CacheLine {
     unsigned long lastUsed = 0; // used for LRU tracking
 };
 
+bool isPowerOfTwo(int n) {
+    return (n > 0) && ((n & (n - 1)) == 0);
+}
+
 int main(int argc, char **argv) {
     // program should have 6 arguments and the program name
     if (argc != 7) {
@@ -31,7 +35,6 @@ int main(int argc, char **argv) {
 
     // here is our validation checking
     // using the following bit trick check for powers of two
-    auto isPowerOfTwo = [](int n) { return n > 0 && (n & (n - 1)) == 0; };
     if (!isPowerOfTwo(numSets) || !isPowerOfTwo(blocksPerSet) || !isPowerOfTwo(blockSize)) {
         cerr << "Error: all size parameters must be powers of 2.\n";
         return 1;
@@ -124,12 +127,16 @@ int main(int argc, char **argv) {
             } else {
                 loadMisses++;
                 cycles += 100 * (blockSize / 4) + 1; // cache miss so get block from memory
-                
-                // take this block just retrieved and insert into cache
-                int target = (emptyIndex != -1) ? emptyIndex : evictIndex;
 
-                if (emptyIndex == -1 && writePolicy == "write-back" && set[evictIndex].dirty) {
-                    cycles += 100 * (blockSize / 4); // write back dirty block
+                // take this block just retrieved and insert into cache
+                int target;
+                if (emptyIndex != -1) {
+                    target = emptyIndex;
+                } else {
+                    target = evictIndex;
+                    if (writePolicy == "write-back" && set[evictIndex].dirty) {
+                        cycles += 100 * (blockSize / 4); // write back dirty block
+                    }
                 }
 
                 set[target].valid = true;
@@ -154,13 +161,16 @@ int main(int argc, char **argv) {
                 storeMisses++;
                 if (isWriteAlloc) {
                     cycles += 100 * (blockSize / 4); // cache miss so get block from memory
-                    
-                    // take this block just retrieved and insert into cache
-                    int target = (emptyIndex != -1) ? emptyIndex : evictIndex;
 
-                    // this is write-back eviction penalty
-                    if (emptyIndex == -1 && writePolicy == "write-back" && set[evictIndex].dirty) {
-                        cycles += 100 * (blockSize / 4);
+                    // take this block just retrieved and insert into cache
+                    int target;
+                    if (emptyIndex != -1) {
+                        target = emptyIndex;
+                    } else {
+                        target = evictIndex;
+                        if (writePolicy == "write-back" && set[evictIndex].dirty) {
+                            cycles += 100 * (blockSize / 4); // this is write-back eviction penalty
+                        }
                     }
 
                     set[target].valid = true;
