@@ -33,6 +33,20 @@ int main(int argc, char **argv) {
     string writePolicy = argv[5];
     string evictPolicy = argv[6];
 
+    // here we take the keyword arguments and validate them (NEW CHANGE)
+    if (writeAlloc != "write-allocate" && writeAlloc != "no-write-allocate") {
+        cerr << "Error: invalid write-allocate argument.\n";
+        return 1;
+    }
+    if (writePolicy != "write-through" && writePolicy != "write-back") {
+        cerr << "Error: invalid write policy.\n";
+        return 1;
+    }
+    if (evictPolicy != "lru" && evictPolicy != "fifo") {
+        cerr << "Error: invalid eviction policy.\n";
+        return 1;
+    }
+
     // here is our validation checking
     // using the following bit trick check for powers of two
     if (!isPowerOfTwo(numSets) || !isPowerOfTwo(blocksPerSet) || !isPowerOfTwo(blockSize)) {
